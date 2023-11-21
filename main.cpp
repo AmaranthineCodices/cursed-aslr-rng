@@ -5,15 +5,13 @@
 
 using RandomPtr = uint64_t (*)();
 
-size_t kCount = 0;
-
 extern "C" __attribute__((visibility("default"))) uint64_t aslr_random() {
   uint64_t value = uint64_t(&aslr_random);
   return value;
 }
 
 uint64_t aslr_rng(const char *self_name) {
-  std::string lib_path = self_name + std::to_string(kCount++);
+  std::string lib_path = std::string(self_name) + "-dlopen-cachebust";
 
   {
     std::ifstream src(self_name, std::ios::binary);
@@ -36,8 +34,8 @@ uint64_t aslr_rng(const char *self_name) {
   }
 
   uint64_t result = aslr_random();
-  // dlclose(handle);
-  // std::remove(lib_path.c_str());
+  dlclose(handle);
+  std::remove(lib_path.c_str());
   return result;
 }
 
