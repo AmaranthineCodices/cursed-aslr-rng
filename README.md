@@ -16,9 +16,9 @@ however, there is a problem: `dlclose` is not guaranteed to actually release the
 
 ## usage
 
-step 1: don't
-step 2: ???
-step 3: revel in your blissful existence
+- step 1: don't
+- step 2: ???
+- step 3: revel in your blissful existence
 
 ## building, in case you too are a fool
 ```
