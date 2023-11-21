@@ -8,11 +8,12 @@ using RandomPtr = uint64_t (*)();
 size_t kCount = 0;
 
 extern "C" __attribute__((visibility("default"))) uint64_t aslr_random() {
-  bool *r = new bool;
-  uint64_t result = uint64_t(r);
-  // don't want to leak memory after all
-  delete r;
-  return result;
+  char *r = new char[4097];
+  r[21] = 'f';
+  uint64_t value = uint64_t(r);
+  delete[] r;
+
+  return value;
 }
 
 uint64_t aslr_rng(const char *self_name) {
@@ -39,8 +40,8 @@ uint64_t aslr_rng(const char *self_name) {
   }
 
   uint64_t result = aslr_random();
-  dlclose(handle);
-  std::remove(lib_path.c_str());
+  // dlclose(handle);
+  // std::remove(lib_path.c_str());
   return result;
 }
 
